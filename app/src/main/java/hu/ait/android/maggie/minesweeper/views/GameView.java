@@ -131,7 +131,11 @@ public class GameView extends View {
     }
 
     public void markMine(Point square) {
-        mines.add(square);
+        if(mines.contains(square)){
+            mines.remove(square);
+        }else {
+            mines.add(square);
+        }
         selectedSquare = null;
         invalidate();
     }

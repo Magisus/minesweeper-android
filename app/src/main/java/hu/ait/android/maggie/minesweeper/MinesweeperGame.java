@@ -53,6 +53,21 @@ public class MinesweeperGame {
         return grid[row][col].isExpanded();
     }
 
+    public void markMine(int row, int col){
+        grid[row][col].setMarked(!grid[row][col].isMarked());
+    }
+
+    public boolean allMinesMarked(){
+        for(int i = 0; i < GRID_WIDTH; i++){
+            for(int j = 0; j < GRID_WIDTH; j++){
+                if(grid[i][j].hasMine() && !grid[i][j].isMarked()){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void expand(int row, int col){
         if(grid[row][col].hasMine()){
             return;

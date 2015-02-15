@@ -5,18 +5,19 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import hu.ait.android.maggie.minesweeper.views.GameView;
 
 
 public class MainActivity extends ActionBarActivity {
 
+    private final MinesweeperGame game = new MinesweeperGame();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final MinesweeperGame game = new MinesweeperGame();
 
         Button mineBtn = (Button) findViewById(R.id.mineBtn);
         Button expandBtn = (Button) findViewById(R.id.expandBtn);
@@ -28,7 +29,8 @@ public class MainActivity extends ActionBarActivity {
                 Point selectedSquare = gameBoard.getSelectedSquare();
                 if (selectedSquare != null) {
                     gameBoard.markMine(selectedSquare);
-                    //Add guess to game logic
+                    game.markMine(selectedSquare.y, selectedSquare.x);
+                    checkForWin();
                 }
             }
         });
@@ -45,5 +47,11 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    private void checkForWin(){
+        if(game.allMinesMarked()){
+            Toast.makeText(MainActivity.this, "You win!", Toast.LENGTH_LONG).show();
+        }
     }
 }
