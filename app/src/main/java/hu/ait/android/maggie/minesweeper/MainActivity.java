@@ -16,6 +16,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final MinesweeperGame game = new MinesweeperGame();
+
         Button mineBtn = (Button) findViewById(R.id.mineBtn);
         Button expandBtn = (Button) findViewById(R.id.expandBtn);
         final GameView gameBoard = (GameView) findViewById(R.id.board);
@@ -36,18 +38,10 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Point selectedSquare = gameBoard.getSelectedSquare();
                 //If this square has already been expanded, do nothing!
-                if(selectedSquare != null) {
-                    gameBoard.showExpansion(new int[][]
-                           {{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {0,1,0,1,2,3,0,0,0,0},
-                            {0,1,0,1,2,3,0,0,0,0}});
+                //Game needs row and column, not x and y, so pass swapped
+                if(selectedSquare != null && !game.expanded(selectedSquare.y, selectedSquare.x)) {
+                    game.expand(selectedSquare.y, selectedSquare.x);
+                    gameBoard.showExpansion(game.getGrid());
                 }
             }
         });

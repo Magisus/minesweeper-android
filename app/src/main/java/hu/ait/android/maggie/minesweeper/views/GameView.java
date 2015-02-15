@@ -10,14 +10,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import static hu.ait.android.maggie.minesweeper.MinesweeperGame.GRID_WIDTH;
 
 /**
  * Created by Magisus on 2/12/2015.
  */
 public class GameView extends View {
-
-    public static final int GRID_WIDTH = 10;
 
     private Paint paintBackground;
     private Paint paintGrid;
@@ -36,6 +36,9 @@ public class GameView extends View {
 
         mines = new ArrayList<>();
         mineCounts = new int[GRID_WIDTH][GRID_WIDTH];
+        for(int i = 0; i < GRID_WIDTH; i++){
+            Arrays.fill(mineCounts[i], -1);
+        }
 
         paintBackground = new Paint();
         paintBackground.setColor(Color.DKGRAY);
