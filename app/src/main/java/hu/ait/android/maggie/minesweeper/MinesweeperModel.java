@@ -141,4 +141,8 @@ public class MinesweeperModel {
         initializeGrid();
         setUpMinefield();
     }
+
+    public boolean isMine(int row, int col) {
+        return grid[row][col].hasMine();
+    }
 }

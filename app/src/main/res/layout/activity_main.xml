@@ -28,4 +28,12 @@
         android:layout_below="@id/board"
         android:layout_alignParentRight="true"/>
 
+    <Button
+        android:id="@+id/playAgainBtn"
+        android:text="@string/play_again"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mineBtn"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

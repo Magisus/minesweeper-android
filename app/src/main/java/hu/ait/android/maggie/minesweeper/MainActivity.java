@@ -19,9 +19,24 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button mineBtn = (Button) findViewById(R.id.mineBtn);
-        Button expandBtn = (Button) findViewById(R.id.expandBtn);
+        final Button mineBtn = (Button) findViewById(R.id.mineBtn);
+        final Button expandBtn = (Button) findViewById(R.id.expandBtn);
         final GameView gameBoard = (GameView) findViewById(R.id.board);
+        final Button playAgainBtn = (Button) findViewById(R.id.playAgainBtn);
+
+        playAgainBtn.setEnabled(false);
+        playAgainBtn.setVisibility(View.INVISIBLE);
+        playAgainBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                game.resetModel();
+                mineBtn.setEnabled(true);
+                expandBtn.setEnabled(true);
+                playAgainBtn.setEnabled(false);
+                playAgainBtn.setVisibility(View.INVISIBLE);
+                gameBoard.reset();
+            }
+        });
 
         mineBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,16 +56,24 @@ public class MainActivity extends ActionBarActivity {
                 Point selectedSquare = gameBoard.getSelectedSquare();
                 //If this square has already been expanded, do nothing!
                 //Game needs row and column, not x and y, so pass swapped
-                if(selectedSquare != null && !game.expanded(selectedSquare.y, selectedSquare.x)) {
-                    game.expand(selectedSquare.y, selectedSquare.x);
-                    gameBoard.showExpansion(game.getGrid());
+                if (selectedSquare != null) {
+                    if (game.isMine(selectedSquare.y, selectedSquare.x)) {
+                        Toast.makeText(MainActivity.this, "You lose!", Toast.LENGTH_LONG).show();
+                        expandBtn.setEnabled(false);
+                        mineBtn.setEnabled(false);
+                        playAgainBtn.setEnabled(true);
+                        playAgainBtn.setVisibility(View.VISIBLE);
+                    } else if (!game.expanded(selectedSquare.y, selectedSquare.x)) {
+                        game.expand(selectedSquare.y, selectedSquare.x);
+                        gameBoard.showExpansion(game.getGrid());
+                    }
                 }
             }
         });
     }
 
-    private void checkForWin(){
-        if(game.allMinesMarked()){
+    private void checkForWin() {
+        if (game.allMinesMarked()) {
             Toast.makeText(MainActivity.this, "You win!", Toast.LENGTH_LONG).show();
         }
     }

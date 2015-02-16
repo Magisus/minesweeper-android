@@ -36,9 +36,7 @@ public class GameView extends View {
 
         mines = new ArrayList<>();
         mineCounts = new int[GRID_WIDTH][GRID_WIDTH];
-        for(int i = 0; i < GRID_WIDTH; i++){
-            Arrays.fill(mineCounts[i], -1);
-        }
+        resetMineCounts();
 
         paintBackground = new Paint();
         paintBackground.setColor(Color.DKGRAY);
@@ -61,6 +59,12 @@ public class GameView extends View {
         paintNoMine = new Paint();
         paintNoMine.setColor(Color.WHITE);
         paintNoMine.setStyle(Paint.Style.FILL);
+    }
+
+    private void resetMineCounts() {
+        for(int i = 0; i < GRID_WIDTH; i++){
+            Arrays.fill(mineCounts[i], -1);
+        }
     }
 
     @Override
@@ -154,6 +158,13 @@ public class GameView extends View {
 
     public void showExpansion(int[][] newMineCounts) {
         mineCounts = newMineCounts;
+        selectedSquare = null;
+        invalidate();
+    }
+
+    public void reset(){
+        resetMineCounts();
+        mines.clear();
         selectedSquare = null;
         invalidate();
     }
