@@ -12,7 +12,7 @@ import hu.ait.android.maggie.minesweeper.views.GameView;
 
 public class MainActivity extends ActionBarActivity {
 
-    private final MinesweeperGame game = new MinesweeperGame();
+    private final MinesweeperModel game = MinesweeperModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +28,8 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Point selectedSquare = gameBoard.getSelectedSquare();
                 if (selectedSquare != null) {
-                    gameBoard.markMine(selectedSquare);
-                    game.markMine(selectedSquare.y, selectedSquare.x);
+                    gameBoard.toggleMine(selectedSquare);
+                    game.toggleMine(selectedSquare.y, selectedSquare.x);
                     checkForWin();
                 }
             }

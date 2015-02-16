@@ -12,7 +12,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static hu.ait.android.maggie.minesweeper.MinesweeperGame.GRID_WIDTH;
+import static hu.ait.android.maggie.minesweeper.MinesweeperModel.GRID_WIDTH;
 
 /**
  * Created by Magisus on 2/12/2015.
@@ -85,25 +85,13 @@ public class GameView extends View {
         canvas.drawRect(0, 0, getWidth(), getHeight(), paintBackground);
 
         int interval = getWidth() / GRID_WIDTH;
-        for (int i = 0; i < 11; i++) {
-            canvas.drawLine(i * interval, 0, i * interval, getHeight(), paintGrid);
-            canvas.drawLine(0, i * interval, getWidth(), i * interval, paintGrid);
-        }
+        drawGridLines(canvas, interval);
+        highlightSelectedSquare(canvas, interval);
+        drawMines(canvas, interval);
+        drawExpandedSquares(canvas, interval);
+    }
 
-        //Highlight selected square
-        if (selectedSquare != null) {
-            canvas.drawRect(selectedSquare.x * interval + 2, selectedSquare.y * interval + 2,
-                    (selectedSquare.x + 1) * interval - 1, (selectedSquare.y + 1) * interval - 1,
-                    paintHighlight);
-        }
-
-        for (Point point : mines) {
-            canvas.drawCircle(point.x * interval + (interval / 2) + 1,
-                              point.y * interval + (interval / 2) + 1,
-                              interval / 3,
-                              paintMine);
-        }
-
+    private void drawExpandedSquares(Canvas canvas, int interval) {
         for (int i = 0; i < GRID_WIDTH; i++) {
             for (int j = 0; j < GRID_WIDTH; j++) {
                 if (mineCounts[i][j] >= 0) {
@@ -119,6 +107,30 @@ public class GameView extends View {
         }
     }
 
+    private void drawGridLines(Canvas canvas, int interval) {
+        for (int i = 0; i < 11; i++) {
+            canvas.drawLine(i * interval, 0, i * interval, getHeight(), paintGrid);
+            canvas.drawLine(0, i * interval, getWidth(), i * interval, paintGrid);
+        }
+    }
+
+    private void highlightSelectedSquare(Canvas canvas, int interval) {
+        if (selectedSquare != null) {
+            canvas.drawRect(selectedSquare.x * interval + 2, selectedSquare.y * interval + 2,
+                    (selectedSquare.x + 1) * interval - 1, (selectedSquare.y + 1) * interval - 1,
+                    paintHighlight);
+        }
+    }
+
+    private void drawMines(Canvas canvas, int interval) {
+        for (Point point : mines) {
+            canvas.drawCircle(point.x * interval + (interval / 2) + 1,
+                              point.y * interval + (interval / 2) + 1,
+                              interval / 3,
+                              paintMine);
+        }
+    }
+
     private Point getSquare(float xIn, float yIn) {
         int interval = getWidth() / GRID_WIDTH;
         int x = (int) (xIn / interval);
@@ -130,7 +142,7 @@ public class GameView extends View {
         return selectedSquare;
     }
 
-    public void markMine(Point square) {
+    public void toggleMine(Point square) {
         if(mines.contains(square)){
             mines.remove(square);
         }else {

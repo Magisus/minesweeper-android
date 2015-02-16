@@ -5,7 +5,16 @@ import java.util.Random;
 /**
  * Created by Magisus on 2/15/2015.
  */
-public class MinesweeperGame {
+public class MinesweeperModel {
+
+    private static MinesweeperModel instance = null;
+
+    public static MinesweeperModel getInstance(){
+        if (instance == null){
+            instance = new MinesweeperModel();
+        }
+        return instance;
+    }
 
     public static final int GRID_WIDTH = 10;
 
@@ -15,31 +24,24 @@ public class MinesweeperGame {
             {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
 
     private Tile[][] grid;
-
     private Random random;
 
-    public MinesweeperGame() {
+    private MinesweeperModel() {
         random = new Random();
-
         grid = new Tile[GRID_WIDTH][GRID_WIDTH];
-        for (int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_WIDTH; j++) {
-                grid[i][j] = new Tile();
-            }
-        }
-
+        initializeGrid();
         setUpMinefield();
     }
 
-    public int[][] getGrid(){
+    public int[][] getGrid() {
         return gridAsNumbers();
     }
 
-    private int[][] gridAsNumbers(){
+    private int[][] gridAsNumbers() {
         int[][] numbers = new int[GRID_WIDTH][GRID_WIDTH];
-        for(int i = 0; i < GRID_WIDTH; i++){
-            for (int j = 0; j < GRID_WIDTH; j++){
-                if(grid[i][j].isExpanded()) {
+        for (int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                if (grid[i][j].isExpanded()) {
                     numbers[i][j] = grid[i][j].getNeighborMines();
                 } else {
                     numbers[i][j] = -1;
@@ -49,18 +51,18 @@ public class MinesweeperGame {
         return numbers;
     }
 
-    public boolean expanded(int row, int col){
+    public boolean expanded(int row, int col) {
         return grid[row][col].isExpanded();
     }
 
-    public void markMine(int row, int col){
+    public void toggleMine(int row, int col) {
         grid[row][col].setMarked(!grid[row][col].isMarked());
     }
 
-    public boolean allMinesMarked(){
-        for(int i = 0; i < GRID_WIDTH; i++){
-            for(int j = 0; j < GRID_WIDTH; j++){
-                if(grid[i][j].hasMine() && !grid[i][j].isMarked()){
+    public boolean allMinesMarked() {
+        for (int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                if (grid[i][j].hasMine() && !grid[i][j].isMarked()) {
                     return false;
                 }
             }
@@ -68,30 +70,33 @@ public class MinesweeperGame {
         return true;
     }
 
-    public void expand(int row, int col){
-        if(grid[row][col].hasMine()){
+    public void expand(int row, int col) {
+        if (grid[row][col].hasMine()) {
             return;
         }
         //Expand this tile
         grid[row][col].setExpanded(true);
         //Expand each neighbor if there are no real or suspected mines adjacent to this tile
-        if(grid[row][col].getNeighborMines() == 0 && !hasMarkedNeighbors(row, col)) {
+        if (grid[row][col].getNeighborMines() == 0 && !hasMarkedNeighbors(row, col)) {
             for (int i = 0; i < OFFSETS.length; i++) {
                 int nRow = row + OFFSETS[i][0];
                 int nCol = col + OFFSETS[i][1];
-                if (nRow >= 0 && nRow < GRID_WIDTH && nCol >= 0 && nCol < GRID_WIDTH
-                        && !grid[nRow][nCol].isExpanded()) {
+                if (onGrid(nRow, nCol) && !grid[nRow][nCol].isExpanded()) {
                     expand(nRow, nCol);
                 }
             }
         }
     }
 
-    private boolean hasMarkedNeighbors(int row, int col){
+    private boolean onGrid(int row, int col){
+        return row >= 0 && row < GRID_WIDTH && col >= 0 && col < GRID_WIDTH;
+    }
+
+    private boolean hasMarkedNeighbors(int row, int col) {
         for (int i = 0; i < OFFSETS.length; i++) {
             int nRow = row + OFFSETS[i][0];
             int nCol = col + OFFSETS[i][1];
-            if (nRow >= 0 && nRow < GRID_WIDTH && nCol >= 0 && nCol < GRID_WIDTH) {
+            if (onGrid(nRow, nCol)) {
                 if (grid[nRow][nCol].isMarked()) {
                     return true;
                 }
@@ -107,7 +112,7 @@ public class MinesweeperGame {
             int row = loc / 10;
             int col = loc % 10;
             if (!grid[row][col].hasMine()) {
-                grid[loc / 10][loc % 10].setMine(true);
+                grid[row][col].setMine(true);
                 updateNeighbors(row, col);
                 mines++;
             }
@@ -124,5 +129,16 @@ public class MinesweeperGame {
         }
     }
 
+    private void initializeGrid(){
+        for (int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                grid[i][j] = new Tile();
+            }
+        }
+    }
 
+    public void resetModel(){
+        initializeGrid();
+        setUpMinefield();
+    }
 }
