@@ -1,4 +1,4 @@
-package hu.ait.android.maggie.minesweeper;
+package hu.ait.android.maggie.minesweeper.model;
 
 import java.util.Random;
 

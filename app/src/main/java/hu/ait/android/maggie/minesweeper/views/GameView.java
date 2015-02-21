@@ -12,7 +12,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import static hu.ait.android.maggie.minesweeper.MinesweeperModel.GRID_WIDTH;
+import static hu.ait.android.maggie.minesweeper.model.MinesweeperModel.GRID_WIDTH;
 
 /**
  * Created by Magisus on 2/12/2015.
@@ -152,20 +152,24 @@ public class GameView extends View {
         }else {
             mines.add(square);
         }
-        selectedSquare = null;
+        clearSelectedSquare();
         invalidate();
     }
 
     public void showExpansion(int[][] newMineCounts) {
         mineCounts = newMineCounts;
-        selectedSquare = null;
+        clearSelectedSquare();
         invalidate();
     }
 
     public void reset(){
         resetMineCounts();
         mines.clear();
-        selectedSquare = null;
+        clearSelectedSquare();
         invalidate();
+    }
+
+    public void clearSelectedSquare() {
+        selectedSquare = null;
     }
 }

@@ -1,4 +1,4 @@
-package hu.ait.android.maggie.minesweeper;
+package hu.ait.android.maggie.minesweeper.model;
 
 /**
  * Created by Magisus on 2/15/2015.
