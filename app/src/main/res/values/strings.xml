@@ -11,5 +11,6 @@
     <string name="mineCountText">Number of Mines</string>
     <string name="win_message">You win!</string>
     <string name="lose_message">You lose!</string>
+    <string name="play_again_dialog">Play again?</string>
 
 </resources>
