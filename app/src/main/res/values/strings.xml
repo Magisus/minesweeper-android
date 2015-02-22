@@ -12,5 +12,7 @@
     <string name="win_message">You win!</string>
     <string name="lose_message">You lose!</string>
     <string name="play_again_dialog">Play again?</string>
+    <string name="left_arrow"><![CDATA[<]]></string>
+    <string name="right_arrow"><![CDATA[>]]></string>
 
 </resources>

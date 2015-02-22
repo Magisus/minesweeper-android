@@ -13,7 +13,35 @@
         android:text="@string/mineCountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/mineCount"
+        android:text="5"
+        android:textSize="35sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mineCountText"
         android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/addMinesBtn"
+        android:text="@string/right_arrow"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/mineCount"
+        android:layout_below="@id/mineCountText"
+        android:layout_marginLeft="10dp"/>
+
+    <Button
+        android:id="@+id/removeMinesBtn"
+        android:text="@string/left_arrow"
+        android:layout_width="35dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mineCountText"
+        android:layout_toLeftOf="@id/mineCount"
+        android:layout_marginRight="10dp"/>
 
     <Button
         android:id="@+id/startBtn"

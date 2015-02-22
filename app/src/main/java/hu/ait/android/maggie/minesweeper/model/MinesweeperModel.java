@@ -18,7 +18,7 @@ public class MinesweeperModel {
 
     public static final int GRID_WIDTH = 10;
 
-    public static final int MINE_COUNT = 10;
+    private int mineCount;
 
     public static final int[][] OFFSETS = {{-1, -1}, {-1, 0}, {-1, 1},
             {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
@@ -28,7 +28,6 @@ public class MinesweeperModel {
 
     private MinesweeperModel() {
         random = new Random();
-        grid = new Tile[GRID_WIDTH][GRID_WIDTH];
         initializeGrid();
         setUpMinefield();
     }
@@ -107,7 +106,7 @@ public class MinesweeperModel {
 
     private void setUpMinefield() {
         int mines = 0;
-        while (mines < MINE_COUNT) {
+        while (mines < mineCount) {
             int loc = random.nextInt(GRID_WIDTH * GRID_WIDTH);
             int row = loc / 10;
             int col = loc % 10;
@@ -130,6 +129,7 @@ public class MinesweeperModel {
     }
 
     private void initializeGrid(){
+        grid = new Tile[GRID_WIDTH][GRID_WIDTH];
         for (int i = 0; i < GRID_WIDTH; i++) {
             for (int j = 0; j < GRID_WIDTH; j++) {
                 grid[i][j] = new Tile();
@@ -144,5 +144,11 @@ public class MinesweeperModel {
 
     public boolean isMine(int row, int col) {
         return grid[row][col].hasMine();
+    }
+
+    public void setMineCount(int count) {
+        mineCount = count;
+        initializeGrid();
+        setUpMinefield();
     }
 }

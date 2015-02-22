@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import hu.ait.android.maggie.minesweeper.model.MinesweeperModel;
 import hu.ait.android.maggie.minesweeper.views.GameView;
+import static hu.ait.android.maggie.minesweeper.GameSetupActivity.EXTRA_MINE_COUNT;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -30,6 +31,8 @@ public class MainActivity extends ActionBarActivity {
         mineBtn = (Button) findViewById(R.id.mineBtn);
         expandBtn = (Button) findViewById(R.id.expandBtn);
         gameBoard = (GameView) findViewById(R.id.board);
+
+        game.setMineCount(getIntent().getIntExtra(EXTRA_MINE_COUNT, 10));
 
         timer = (Chronometer) findViewById(R.id.timer);
 
