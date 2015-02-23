@@ -12,12 +12,15 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static hu.ait.android.maggie.minesweeper.model.MinesweeperModel.GRID_WIDTH;
 
 /**
  * Created by Magisus on 2/12/2015.
  */
 public class GameView extends View {
+
+    public static final int TEXT_SIZE = 13;
 
     private Paint paintBackground;
     private Paint paintGrid;
@@ -54,7 +57,8 @@ public class GameView extends View {
         paintMine = new Paint();
         paintMine.setColor(Color.BLACK);
         paintMine.setStyle(Paint.Style.FILL);
-        //paintMine.setTextSize(); Figure this out!
+        final float scale = getResources().getDisplayMetrics().density;
+        paintMine.setTextSize(TEXT_SIZE * scale + 0.5f);
 
         paintNoMine = new Paint();
         paintNoMine.setColor(Color.WHITE);
@@ -62,7 +66,7 @@ public class GameView extends View {
     }
 
     private void resetMineCounts() {
-        for(int i = 0; i < GRID_WIDTH; i++){
+        for (int i = 0; i < GRID_WIDTH; i++) {
             Arrays.fill(mineCounts[i], -1);
         }
     }
@@ -104,8 +108,10 @@ public class GameView extends View {
                             paintNoMine);
                 }
                 if (mineCounts[i][j] > 0) {
-                    canvas.drawText(Integer.toString(mineCounts[i][j]), j * interval + 19,
-                            i * interval + 27, paintMine);
+                    float textWidth = paintMine.measureText(Integer.toString(mineCounts[i][j]));
+                    canvas.drawText(Integer.toString(mineCounts[i][j]),
+                            j * interval + ((int) (textWidth * 1.5)),
+                            i * interval + ((int) (paintMine.getTextSize() * 1.5)), paintMine);
                 }
             }
         }
@@ -129,9 +135,9 @@ public class GameView extends View {
     private void drawMines(Canvas canvas, int interval) {
         for (Point point : mines) {
             canvas.drawCircle(point.x * interval + (interval / 2) + 1,
-                              point.y * interval + (interval / 2) + 1,
-                              interval / 3,
-                              paintMine);
+                    point.y * interval + (interval / 2) + 1,
+                    interval / 3,
+                    paintMine);
         }
     }
 
@@ -147,9 +153,9 @@ public class GameView extends View {
     }
 
     public void toggleMine(Point square) {
-        if(mines.contains(square)){
+        if (mines.contains(square)) {
             mines.remove(square);
-        }else {
+        } else {
             mines.add(square);
         }
         clearSelectedSquare();
@@ -162,7 +168,7 @@ public class GameView extends View {
         invalidate();
     }
 
-    public void reset(){
+    public void reset() {
         resetMineCounts();
         mines.clear();
         clearSelectedSquare();
