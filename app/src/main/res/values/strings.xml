@@ -17,5 +17,10 @@
     <string name="new_game">New Game</string>
     <string name="options">Options</string>
     <string name="high_scores">High scores</string>
+    <string name="title_activity_high_scores">HighScoresActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="clear_scores">Clear scores</string>
+    <string name="high_score_title">High Scores</string>
 
 </resources>

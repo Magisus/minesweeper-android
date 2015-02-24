@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="hu.ait.android.maggie.minesweeper.HighScoresActivity">
+    <item
+        android:id="@+id/options"
+        android:title="@string/options"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha">
+        <menu>
+            <item
+                android:id="@+id/new_game_action"
+                android:title="@string/new_game"
+                android:orderInCategory="100"
+                app:showAsAction="always"/>
+
+            <item
+                android:id="@+id/clear_action"
+                android:title="@string/clear_scores"
+                android:orderInCategory="101"
+                app:showAsAction="always"/>
+        </menu>
+    </item>
+</menu>

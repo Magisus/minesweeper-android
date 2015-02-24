@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(new Intent(this, GameSetupActivity.class));
                 return true;
             case R.id.high_scores_action:
-                Toast.makeText(this, "High Scores", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, HighScoresActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
