@@ -177,5 +177,6 @@ public class GameView extends View {
 
     public void clearSelectedSquare() {
         selectedSquare = null;
+        invalidate();
     }
 }

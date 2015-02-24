@@ -14,5 +14,8 @@
     <string name="play_again_dialog">Play again?</string>
     <string name="left_arrow"><![CDATA[<]]></string>
     <string name="right_arrow"><![CDATA[>]]></string>
+    <string name="new_game">New Game</string>
+    <string name="options">Options</string>
+    <string name="high_scores">High scores</string>
 
 </resources>
