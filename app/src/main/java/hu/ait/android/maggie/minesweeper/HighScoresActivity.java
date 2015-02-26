@@ -9,16 +9,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 
 public class HighScoresActivity extends ActionBarActivity {
 
     public static final int SCORE_COUNT = 10;
+    public static final String EMPTY_TIME = "--:--";
 
     private String[] times;
     private TextView scoresText;
@@ -43,15 +48,15 @@ public class HighScoresActivity extends ActionBarActivity {
     }
 
     private void resetScores(){
-        Arrays.fill(times, "30:00");
+        Arrays.fill(times, EMPTY_TIME);
         scoresText.setText(createScoreString());
         scoresText.invalidate();
     }
 
     private String[] loadTimes() {
-        String[] timesFromFile = new String[10];
+        String[] timesFromFile = new String[SCORE_COUNT];
         try{
-            InputStream in = this.getResources().openRawResource(R.raw.high_scores);
+            FileInputStream in = openFileInput("high_scores.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line;
             int i = 0;
@@ -62,10 +67,11 @@ public class HighScoresActivity extends ActionBarActivity {
                 timesFromFile[i] = line;
                 i++;
             }
+            in.close();
         } catch(Exception e){
             e.printStackTrace();
-            timesFromFile = new String[10];
-            Arrays.fill(timesFromFile, "30:00");
+            timesFromFile = new String[SCORE_COUNT];
+            Arrays.fill(timesFromFile, EMPTY_TIME);
         }
         return timesFromFile;
     }
@@ -79,6 +85,21 @@ public class HighScoresActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_high_scores, menu);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            FileOutputStream out = openFileOutput("high_scores.txt", MODE_PRIVATE);
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+            for(int i = 0; i < times.length; i++){
+                writer.append(times[i]);
+            }
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
