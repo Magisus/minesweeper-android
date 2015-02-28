@@ -3,6 +3,7 @@ package hu.ait.android.maggie.minesweeper;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.Menu;
@@ -18,6 +19,8 @@ import static hu.ait.android.maggie.minesweeper.GameSetupActivity.EXTRA_MINE_COU
 
 
 public class MainActivity extends ActionBarActivity {
+
+    public static final String NEW_SCORE = "hu.ait.android.maggie.minesweeper.NEW_SCORE";
 
     private final MinesweeperModel game = MinesweeperModel.getInstance();
 
@@ -49,6 +52,7 @@ public class MainActivity extends ActionBarActivity {
                     if(checkForWin()){
                         displayMessage(getString(R.string.win_message));
                         endRound();
+                        goToHighScores();
                     }
                 }
             }
@@ -71,6 +75,18 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         });
+    }
+
+    private void goToHighScores() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent highScoresIntent = new Intent(MainActivity.this, HighScoresActivity.class);
+                highScoresIntent.putExtra(NEW_SCORE, timer.getText());
+                startActivity(highScoresIntent);
+            }
+        }, 2000);
     }
 
     @Override
