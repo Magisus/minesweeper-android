@@ -9,16 +9,37 @@
                 tools:context="hu.ait.android.maggie.minesweeper.GameSetupActivity">
 
     <TextView
+        android:id="@+id/gridSizeText"
+        android:text="@string/grid_size"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/gridDims"
+        android:textSize="35sp"
+        android:text="@string/grid_dimensions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gridSizeText"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
         android:id="@+id/mineCountText"
         android:text="@string/mineCountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textSize="30sp"/>
+        android:layout_below="@id/gridDims"
+        android:layout_marginTop="40dp"
+        android:textSize="30sp"
+        android:textColor="#000000"/>
 
     <TextView
         android:id="@+id/mineCount"
-        android:text="5"
+        android:text="10"
         android:textSize="35sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

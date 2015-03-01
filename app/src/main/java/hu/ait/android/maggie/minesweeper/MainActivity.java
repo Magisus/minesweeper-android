@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import hu.ait.android.maggie.minesweeper.model.MinesweeperModel;
 import hu.ait.android.maggie.minesweeper.views.GameView;
+
 import static hu.ait.android.maggie.minesweeper.GameSetupActivity.EXTRA_MINE_COUNT;
 
 
@@ -49,10 +50,10 @@ public class MainActivity extends ActionBarActivity {
                 if (selectedSquare != null) {
                     gameBoard.toggleMine(selectedSquare);
                     game.toggleMine(selectedSquare.y, selectedSquare.x);
-                    if(checkForWin()){
+                    if (checkForWin()) {
                         displayMessage(getString(R.string.win_message));
                         endRound();
-                        goToHighScores();
+                        goToHighScores(true);
                     }
                 }
             }
@@ -68,6 +69,7 @@ public class MainActivity extends ActionBarActivity {
                     if (game.isMine(selectedSquare.y, selectedSquare.x)) {
                         displayMessage(getString(R.string.lose_message));
                         endRound();
+                        goToHighScores(false);
                     } else if (!game.expanded(selectedSquare.y, selectedSquare.x)) {
                         game.expand(selectedSquare.y, selectedSquare.x);
                         gameBoard.showExpansion(game.getGrid());
@@ -77,13 +79,19 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-    private void goToHighScores() {
+    /**
+     * Opens high score activity after a short delay. If the game was won,
+     * submits the new potential high score.
+     */
+    private void goToHighScores(final boolean gameWon) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent highScoresIntent = new Intent(MainActivity.this, HighScoresActivity.class);
-                highScoresIntent.putExtra(NEW_SCORE, timer.getText());
+                if (gameWon) {
+                    highScoresIntent.putExtra(NEW_SCORE, timer.getText());
+                }
                 startActivity(highScoresIntent);
             }
         }, 2000);
@@ -98,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
+        switch (id) {
             case R.id.new_game_action:
                 startActivity(new Intent(this, GameSetupActivity.class));
                 return true;
@@ -116,15 +124,15 @@ public class MainActivity extends ActionBarActivity {
         timer.start();
     }
 
-    private void endRound(){
+    private void endRound() {
         expandBtn.setEnabled(false);
         mineBtn.setEnabled(false);
         gameBoard.clearSelectedSquare();
         timer.stop();
     }
 
-    private void displayMessage(String text){
-        Toast winMsg = Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG);
+    private void displayMessage(String text) {
+        Toast winMsg = Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT);
         winMsg.setGravity(Gravity.CENTER_VERTICAL, 0, -15);
         winMsg.show();
     }

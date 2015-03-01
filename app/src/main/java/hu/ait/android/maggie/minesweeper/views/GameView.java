@@ -22,6 +22,8 @@ public class GameView extends View {
 
     public static final int TEXT_SIZE = 13;
 
+    public static final int ORANGE = Color.rgb(255, 140, 0);
+
     private Paint paintBackground;
     private Paint paintGrid;
     private Paint paintHighlight;
@@ -51,7 +53,7 @@ public class GameView extends View {
         paintGrid.setStrokeWidth(3);
 
         paintHighlight = new Paint();
-        paintHighlight.setColor(Color.RED);
+        paintHighlight.setColor(ORANGE);
         paintHighlight.setStyle(Paint.Style.FILL);
 
         paintMine = new Paint();

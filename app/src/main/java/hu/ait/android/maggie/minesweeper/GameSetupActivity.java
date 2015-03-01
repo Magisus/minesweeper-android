@@ -32,24 +32,33 @@ public class GameSetupActivity extends ActionBarActivity {
             }
         });
 
-        Button addMinesBtn = (Button) findViewById(R.id.addMinesBtn);
+        final Button addMinesBtn = (Button) findViewById(R.id.addMinesBtn);
+        final Button removeMinesBtn = (Button) findViewById(R.id.removeMinesBtn);
+
         addMinesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int current = Integer.parseInt(mineCount.getText().toString());
                 if(current < 15){
+                    removeMinesBtn.setEnabled(true);
                     mineCount.setText(Integer.toString(current + 1));
+                    if((current + 1) == 15){
+                        addMinesBtn.setEnabled(false);
+                    }
                 }
             }
         });
 
-        Button removeMinesBtn = (Button) findViewById(R.id.removeMinesBtn);
         removeMinesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int current = Integer.parseInt(mineCount.getText().toString());
                 if(current > 3) {
+                    addMinesBtn.setEnabled(true);
                     mineCount.setText(Integer.toString(current - 1));
+                    if((current - 1) == 3){
+                        removeMinesBtn.setEnabled(false);
+                    }
                 }
             }
         });

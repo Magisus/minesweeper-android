@@ -1,10 +1,16 @@
 package hu.ait.android.maggie.minesweeper;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -12,10 +18,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+
+import hu.ait.android.maggie.minesweeper.views.GameView;
 
 
 public class HighScoresActivity extends ActionBarActivity {
@@ -25,7 +32,7 @@ public class HighScoresActivity extends ActionBarActivity {
     public static final String HIGH_SCORES_FILE = "high_scores.txt";
 
     private String[] times;
-    private TextView scoresText;
+    private TextView[] scoresTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,43 +42,57 @@ public class HighScoresActivity extends ActionBarActivity {
         times = loadTimes();
 
         String newScore = getIntent().getStringExtra(MainActivity.NEW_SCORE);
-        if(newScore != null){
-            insertNewScore(newScore);
+        int newScoreIndex = -1;
+        if (newScore != null) {
+            newScoreIndex = insertNewScore(newScore);
         }
 
-        scoresText = (TextView) findViewById(R.id.scoresText);
-        scoresText.setText(createScoreString());
+        scoresTexts = new TextView[SCORE_COUNT];
+        final LinearLayout layoutContainer = (LinearLayout) findViewById(R.id.layoutContainer);
+        for (int i = 0; i < SCORE_COUNT; i++) {
+            scoresTexts[i] = new TextView(HighScoresActivity.this);
+            scoresTexts[i].setText((i + 1) + ". " + times[i]);
+            scoresTexts[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, 27);
+            if((newScoreIndex != -1) && (i == newScoreIndex)){
+                scoresTexts[i].setTextColor(GameView.ORANGE);
+            }
+            LinearLayout.LayoutParams params =  new LinearLayout.LayoutParams(ViewGroup
+                    .LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            scoresTexts[i].setGravity(Gravity.CENTER_HORIZONTAL);
+            layoutContainer.addView(scoresTexts[i], params);
+        }
     }
 
-    private void insertNewScore(String newScore) {
-        for(int i = 0; i < times.length; i++){
-            if(EMPTY_TIME.equals(times[i]) || times[i].compareTo(newScore) >= 0){
+    /**
+     * Inserts the new score into the correct location in previous high scores array.
+     * Returns the index of the inserted score.
+     */
+    private int insertNewScore(String newScore) {
+        for (int i = 0; i < times.length; i++) {
+            if (EMPTY_TIME.equals(times[i]) || times[i].compareTo(newScore) >= 0) {
                 String temp = times[i];
                 times[i] = newScore;
-                for(int j = i + 1; j < times.length; j++){
+                for (int j = i + 1; j < times.length; j++) {
                     String temp2 = times[j];
                     times[j] = temp;
                     temp = temp2;
                 }
-                return;
+                return i;
             }
         }
+        return -1;
     }
 
-    private String createScoreString() {
-        StringBuilder scoreString = new StringBuilder();
-        for (int i = 0; i < times.length; i++) {
-            scoreString.append((i + 1) + ". " + times[i] + "\n");
-        }
-        return scoreString.toString();
-    }
-
+    /** Sets all score entries back to EMPTY_SCORE. */
     private void resetScores() {
         Arrays.fill(times, EMPTY_TIME);
-        scoresText.setText(createScoreString());
-        scoresText.invalidate();
+        for (int i = 0; i < SCORE_COUNT; i++) {
+            scoresTexts[i].setText(times[i]);
+            scoresTexts[i].invalidate();
+        }
     }
 
+    /** Load saved high scores from file. */
     private String[] loadTimes() {
         String[] timesFromFile = new String[SCORE_COUNT];
         try {
@@ -86,7 +107,7 @@ public class HighScoresActivity extends ActionBarActivity {
                 timesFromFile[i] = line;
                 i++;
             }
-            if(i == 0){ //File was empty
+            if (i == 0) { //File was empty
                 Arrays.fill(timesFromFile, EMPTY_TIME);
             }
             in.close();
@@ -110,6 +131,7 @@ public class HighScoresActivity extends ActionBarActivity {
     }
 
     @Override
+    /** Save the displayed scores to file. */
     protected void onStop() {
         String dir = getFilesDir().getAbsolutePath();
         File highScores = new File(dir, HIGH_SCORES_FILE);

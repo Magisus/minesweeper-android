@@ -22,5 +22,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="clear_scores">Clear scores</string>
     <string name="high_score_title">High Scores</string>
+    <string name="grid_size">Grid Size</string>
+    <string name="grid_dimensions">10 x 10</string>
 
 </resources>
