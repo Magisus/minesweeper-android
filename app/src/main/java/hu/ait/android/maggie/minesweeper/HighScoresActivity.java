@@ -22,6 +22,7 @@ public class HighScoresActivity extends ActionBarActivity {
 
     public static final int SCORE_COUNT = 10;
     public static final String EMPTY_TIME = "--:--";
+    public static final String HIGH_SCORES_FILE = "high_scores.txt";
 
     private String[] times;
     private TextView scoresText;
@@ -74,7 +75,7 @@ public class HighScoresActivity extends ActionBarActivity {
     private String[] loadTimes() {
         String[] timesFromFile = new String[SCORE_COUNT];
         try {
-            FileInputStream in = openFileInput("high_scores.txt");
+            FileInputStream in = openFileInput(HIGH_SCORES_FILE);
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line;
             int i = 0;
@@ -111,10 +112,10 @@ public class HighScoresActivity extends ActionBarActivity {
     @Override
     protected void onStop() {
         String dir = getFilesDir().getAbsolutePath();
-        File highScores = new File(dir, "high_scores.txt");
+        File highScores = new File(dir, HIGH_SCORES_FILE);
         highScores.delete();
         try {
-            FileOutputStream out = openFileOutput("high_scores.txt", MODE_PRIVATE);
+            FileOutputStream out = openFileOutput(HIGH_SCORES_FILE, MODE_PRIVATE);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
             for (int i = 0; i < times.length; i++) {
                 writer.write(times[i] + '\n');
